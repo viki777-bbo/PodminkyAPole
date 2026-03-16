@@ -1,14 +1,47 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-    <meta charset="UTF-8">
-    <title>HRA</title>
+<meta charset="UTF-8">
+<title>HRA</title>
 </head>
-<body>
-    <div id="hrdina" style="position: absolute; left: 100px; top: 100px; font-size: 50px;">🧍</div>
 
-    <script>
-        // sem budeme psát kód
-    </script>
+<body>
+
+<div id="hrdina" style="position:absolute; left:100px; top:100px; font-size:50px;">
+🧍
+</div>
+
+<script>
+const hrdina = document.getElementById("hrdina");
+
+let x = 100;
+let y = 100;
+
+document.addEventListener("keydown", function(event) {
+
+    if (event.key === "ArrowUp") {
+        y -= 10;
+    }
+
+    if (event.key === "ArrowDown") {
+        y += 10;
+    }
+
+    if (event.key === "ArrowLeft") {
+        x -= 10;
+    }
+
+    if (event.key === "ArrowRight") {
+        x += 10;
+    }
+
+    hrdina.style.left = x + "px";
+    hrdina.style.top = y + "px";
+});
+</script>
+
+<script defer src="omezenipohybu.js"></script>
+<script defer src="prekazky7.js"></script>
+
 </body>
 </html>
