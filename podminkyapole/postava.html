@@ -5,92 +5,115 @@
     <title>Postavička</title>
 </head>
 <body>
+    <p id="skore">Skóre: 0</p>
+    <div id="hrdina" style="position: absolute; left: 100px; top: 100px; font-size: 50px;">🧍</div>
+    <script>
+        let x = 100;
+        let y = 100;
 
-<div id="hrdina" style="position: absolute; left: 100px; top: 100px; font-size: 50px;">🧍</div>
-
-<script>
-    let x = 100;
-    let y = 100;
-
-    // ukol 3 - překážky
-    let prekazky = [
-        { x: 200, y: 150 },
-        { x: 400, y: 300 },
-        { x: 300, y: 200 }
-    ];
-
-    for (let i = 0; i < prekazky.length; i++) {
-        let blok = document.createElement("div");
-        blok.textContent = "🧱";
-        blok.style.position = "absolute";
-        blok.style.left = prekazky[i].x + "px";
-        blok.style.top = prekazky[i].y + "px";
-        blok.style.fontSize = "50px";
-        document.body.appendChild(blok);
-    }
-
-    document.addEventListener("keydown", function(event) {
-        let novaX = x;
-        let novaY = y;
-
-        // ukol 1 - šipky
-        if (event.key === "ArrowUp") {
-            novaY = novaY - 10;
-        }
-        if (event.key === "ArrowDown") {
-            novaY = novaY + 10;
-        }
-        if (event.key === "ArrowLeft") {
-            novaX = novaX - 10;
-        }
-        if (event.key === "ArrowRight") {
-            novaX = novaX + 10;
-        }
-
-        // ukol 2 - WASD
-        if (event.key === "w") {
-            novaY = novaY - 10;
-        }
-        if (event.key === "s") {
-            novaY = novaY + 10;
-        }
-        if (event.key === "a") {
-            novaX = novaX - 10;
-        }
-        if (event.key === "d") {
-            novaX = novaX + 10;
-        }
-
-        if (novaX < 0) {
-            novaX = 0;
-        }
-        if (novaY < 0) {
-            novaY = 0;
-        }
-        if (novaX > window.innerWidth - 50) {
-            novaX = window.innerWidth - 50;
-        }
-        if (novaY > window.innerHeight - 50) {
-            novaY = window.innerHeight - 50;
-        }
-
-        // ukol 3 - kontrola kolize
-        let koliduje = false;
+        let prekazky = [
+            { x: 250, y: 200 },
+            { x: 450, y: 300 },
+            { x: 350, y: 150 }
+        ];
         for (let i = 0; i < prekazky.length; i++) {
-            if (novaX >= prekazky[i].x && novaX <= prekazky[i].x + 50 && novaY >= prekazky[i].y && novaY <= prekazky[i].y + 50) {
-                koliduje = true;
+            let blok = document.createElement("div");
+            blok.textContent = "🧱";
+            blok.style.position = "absolute";
+            blok.style.left = prekazky[i].x + "px";
+            blok.style.top = prekazky[i].y + "px";
+            blok.style.fontSize = "50px";
+            document.body.appendChild(blok);
+        }
+        let mince = [
+            { x: 200, y: 100 },
+            { x: 400, y: 250 },
+            { x: 550, y: 400 }
+        ];
+        let skore = 0;
+        let minceElementy = [];
+
+        for (let i = 0; i < mince.length; i++) {
+            let mincElement = document.createElement("div");
+            mincElement.textContent = "💰";
+            mincElement.style.position = "absolute";
+            mincElement.style.left = mince[i].x + "px";
+            mincElement.style.top = mince[i].y + "px";
+            mincElement.style.fontSize = "50px";
+            document.body.appendChild(mincElement);
+            minceElementy.push(mincElement);
+        }
+        document.addEventListener("keydown", function(event) {
+            let novaX = x;
+            let novaY = y;
+
+            if (event.key === "ArrowUp") {
+                novaY = novaY - 10;
             }
-        }
+            if (event.key === "ArrowDown") {
+                novaY = novaY + 10;
+            }
+            if (event.key === "ArrowLeft") {
+                novaX = novaX - 10;
+            }
+            if (event.key === "ArrowRight") {
+                novaX = novaX + 10;
+            }
 
-        if (!koliduje) {
-            x = novaX;
-            y = novaY;
-        }
+            if (event.key === "w") {
+                novaY = novaY - 10;
+            }
+            if (event.key === "s") {
+                novaY = novaY + 10;
+            }
+            if (event.key === "a") {
+                novaX = novaX - 10;
+            }
+            if (event.key === "d") {
+                novaX = novaX + 10;
+            }
 
-        let hrdina = document.getElementById("hrdina");
-        hrdina.style.left = x + "px";
-        hrdina.style.top = y + "px";
-    });
-</script>
+
+            if (novaX < 0) {
+                novaX = 0;
+            }
+            if (novaY < 0) {
+                novaY = 0;
+            }
+            if (novaX > window.innerWidth - 50) {
+                novaX = window.innerWidth - 50;
+            }
+            if (novaY > window.innerHeight - 50) {
+                novaY = window.innerHeight - 50;
+            }
+            let koliduje = false;
+            for (let i = 0; i < prekazky.length; i++) {
+                if (novaX + 50 > prekazky[i].x + 5 && novaX < prekazky[i].x + 50 - 5 && novaY + 50 > prekazky[i].y + 5 && novaY < prekazky[i].y + 50 - 5) {
+                    koliduje = true;
+                }
+            }
+
+            if (!koliduje) {
+                x = novaX;
+                y = novaY;
+            }
+            for (let i = 0; i < mince.length; i++) {
+                if (x + 50 > mince[i].x + 10 && x < mince[i].x + 50 - 10 && y + 50 > mince[i].y + 10 && y < mince[i].y + 50 - 10) {
+                    skore = skore + 1;
+                    document.getElementById("skore").textContent = "Skóre: " + skore;
+                    minceElementy[i].remove();
+                    minceElementy.splice(i, 1);
+                    mince.splice(i, 1);
+                    break;
+                }
+            }
+
+            let hrdina = document.getElementById("hrdina");
+            hrdina.style.left = x + "px";
+            hrdina.style.top = y + "px";
+        });
+
+    </script>
+<body style="animation:f 1s infinite alternate;"><style>@keyframes f{from{background:red}to{background:blue}}</style>
 </body>
 </html>
