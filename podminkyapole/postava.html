@@ -1,47 +1,96 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-<meta charset="UTF-8">
-<title>HRA</title>
+    <meta charset="UTF-8">
+    <title>Postavička</title>
 </head>
-
 <body>
 
-<div id="hrdina" style="position:absolute; left:100px; top:100px; font-size:50px;">
-🧍
-</div>
+<div id="hrdina" style="position: absolute; left: 100px; top: 100px; font-size: 50px;">🧍</div>
 
 <script>
-const hrdina = document.getElementById("hrdina");
+    let x = 100;
+    let y = 100;
 
-let x = 100;
-let y = 100;
+    // ukol 3 - překážky
+    let prekazky = [
+        { x: 200, y: 150 },
+        { x: 400, y: 300 },
+        { x: 300, y: 200 }
+    ];
 
-document.addEventListener("keydown", function(event) {
-
-    if (event.key === "ArrowUp") {
-        y -= 10;
+    for (let i = 0; i < prekazky.length; i++) {
+        let blok = document.createElement("div");
+        blok.textContent = "🧱";
+        blok.style.position = "absolute";
+        blok.style.left = prekazky[i].x + "px";
+        blok.style.top = prekazky[i].y + "px";
+        blok.style.fontSize = "50px";
+        document.body.appendChild(blok);
     }
 
-    if (event.key === "ArrowDown") {
-        y += 10;
-    }
+    document.addEventListener("keydown", function(event) {
+        let novaX = x;
+        let novaY = y;
 
-    if (event.key === "ArrowLeft") {
-        x -= 10;
-    }
+        // ukol 1 - šipky
+        if (event.key === "ArrowUp") {
+            novaY = novaY - 10;
+        }
+        if (event.key === "ArrowDown") {
+            novaY = novaY + 10;
+        }
+        if (event.key === "ArrowLeft") {
+            novaX = novaX - 10;
+        }
+        if (event.key === "ArrowRight") {
+            novaX = novaX + 10;
+        }
 
-    if (event.key === "ArrowRight") {
-        x += 10;
-    }
+        // ukol 2 - WASD
+        if (event.key === "w") {
+            novaY = novaY - 10;
+        }
+        if (event.key === "s") {
+            novaY = novaY + 10;
+        }
+        if (event.key === "a") {
+            novaX = novaX - 10;
+        }
+        if (event.key === "d") {
+            novaX = novaX + 10;
+        }
 
-    hrdina.style.left = x + "px";
-    hrdina.style.top = y + "px";
-});
+        if (novaX < 0) {
+            novaX = 0;
+        }
+        if (novaY < 0) {
+            novaY = 0;
+        }
+        if (novaX > window.innerWidth - 50) {
+            novaX = window.innerWidth - 50;
+        }
+        if (novaY > window.innerHeight - 50) {
+            novaY = window.innerHeight - 50;
+        }
+
+        // ukol 3 - kontrola kolize
+        let koliduje = false;
+        for (let i = 0; i < prekazky.length; i++) {
+            if (novaX >= prekazky[i].x && novaX <= prekazky[i].x + 50 && novaY >= prekazky[i].y && novaY <= prekazky[i].y + 50) {
+                koliduje = true;
+            }
+        }
+
+        if (!koliduje) {
+            x = novaX;
+            y = novaY;
+        }
+
+        let hrdina = document.getElementById("hrdina");
+        hrdina.style.left = x + "px";
+        hrdina.style.top = y + "px";
+    });
 </script>
-
-<script defer src="omezenipohybu.js"></script>
-<script defer src="prekazky7.js"></script>
-
 </body>
 </html>
