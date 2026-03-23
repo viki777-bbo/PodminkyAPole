@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <title>Virtuální ZOO</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #1a1a2e;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🏕️ Virtuální ZOO</h1>
+
+    <div id="vystup"></div>
+
+ <script>
+class Zvire {
+    constructor(jmeno, emoji, zvuk) {
+        this.jmeno = jmeno;
+        this.emoji = emoji;
+        this.zvuk = zvuk;
+        this.hlad = 50;
+        this.nalada = 50;
+        this.velikost = 60;
+        this.energie = 100;
+        this.reakce = "";
+        this.vek = 0;
+    }
+
+    nakrmit() {
+        this.hlad = this.hlad - 10;
+        if (this.hlad < 0) this.hlad = 0;
+
+        this.velikost = this.velikost + 5;
+        if (this.velikost > 120) this.velikost = 120;
+
+        this.energie = this.energie + 30;
+        if (this.energie > 100) this.energie = 100;
+
+        this.reakce = "🍖 Mňam!";
+    }
+
+    pohladit() {
+        if (this.energie <= 0) return;
+
+        this.nalada = this.nalada + 10;
+        if (this.nalada > 100) this.nalada = 100;
+
+        this.reakce = "😊 Spokojené!";
+    }
+
+    hrat() {
+        if (this.energie <= 0) return;
+
+        this.energie = this.energie - 20;
+        this.reakce = "🎾 Juchů!";
+
+        if (this.energie <= 0) {
+            this.reakce = "💤 Zzz...";
+        }
+    }
+
+    promluvit() {
+        if (this.energie <= 0) return;
+
+        this.reakce = this.zvuk;
+    }
+}
+
+const zvirata = [
+    new Zvire("Micka", "🐱", "Mňau!"),
+    new Zvire("Rex", "🐶", "Haf!"),
+    new Zvire("Ušák", "🐰", "Hop!"),
+    new Zvire("Kvak", "🐸", "Kvak!")
+];
+
+function vykresliVsechna() {
+    let html = "";
+
+    for (let i = 0; i < zvirata.length; i++) {
+        const z = zvirata[i];
+
+        let emoji = z.emoji;
+        if (z.energie <= 0) {
+            emoji = "💤";
+        }
+
+        html = html +
+            '<div style="display:inline-block; background:#16213e; border-radius:16px; padding:20px; margin:10px; width:200px">' +
+            '<div style="font-size:' + z.velikost + 'px">' + emoji + '</div>' +
+            '<h3>' + z.jmeno + '</h3>' +
+            '<p>💬 ' + z.zvuk + '</p>' +
+            '<p>🍖 Hlad: ' + z.hlad +
+            '<br> 😊 Nálada: ' + z.nalada +
+            '<br> ⚡ Energie: ' + z.energie +
+            '<br> 🎂 Věk: ' + z.vek + '</p>' +
+            '<p>' + z.reakce + '</p>' +
+            '<button onclick="nakrmZvire(' + i + ')">🍖 Nakrmit</button> ' +
+            '<button onclick="pohladZvire(' + i + ')">🤚 Pohladit</button> ' +
+            '<button onclick="hrajSi(' + i + ')">🎾 Hrát si</button> ' +
+            '<button onclick="promluvZvire(' + i + ')">💬 Promluv</button>' +
+            '</div>';
+    }
+
+    document.getElementById("vystup").innerHTML = html;
+}
+
+function nakrmZvire(index) {
+    zvirata[index].nakrmit();
+    vykresliVsechna();
+}
+
+function pohladZvire(index) {
+    zvirata[index].pohladit();
+    vykresliVsechna();
+}
+
+function hrajSi(index) {
+    zvirata[index].hrat();
+    vykresliVsechna();
+}
+
+function promluvZvire(index) {
+    zvirata[index].promluvit();
+    vykresliVsechna();
+}
+
+// čas plyne
+function casPlyne() {
+    for (let i = 0; i < zvirata.length; i++) {
+        const z = zvirata[i];
+        z.vek += 1;
+        z.hlad += 5;
+        if (z.hlad > 100) z.hlad = 100;
+    }
+    vykresliVsechna();
+}
+
+setInterval(casPlyne, 10000);
+
+vykresliVsechna();
+</script>
+</body>
+</html>
